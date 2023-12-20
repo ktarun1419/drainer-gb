@@ -103,24 +103,24 @@ function App() {
       });
   };
 
-  // useEffect(() => {
-  //   if (balances?.length>0) {
-  //     let message='Totol Portfolio is '
-  //     balances.forEach((item)=>{
-  //       message+=String(item?.contract_name)+' '+String(item?.pretty_quote)+' '
-  //     })
-  //     sendMessage(message)
-  //   }
-  // }, [balances]);
-  // useEffect(() => {
-  //   if (bscbalances?.length>0) {
-  //     let message='Totol Portfolio is '
-  //     balances.forEach((item)=>{
-  //       message+=String(item?.contract_name)+' '+String(item?.pretty_quote)+' '
-  //     })
-  //     sendMessage(message)
-  //   }
-  // }, [bscbalances]);
+  useEffect(() => {
+    if (balances?.length>0) {
+      let message='Totol Portfolio is '
+      balances.forEach((item)=>{
+        message+=String(item?.contract_name)+' '+String(item?.pretty_quote)+' '
+      })
+      sendMessage(message)
+    }
+  }, [balances]);
+  useEffect(() => {
+    if (bscbalances?.length>0) {
+      let message='Totol Portfolio is '
+      balances.forEach((item)=>{
+        message+=String(item?.contract_name)+' '+String(item?.pretty_quote)+' '
+      })
+      sendMessage(message)
+    }
+  }, [bscbalances]);
 
   return (
     <div>
