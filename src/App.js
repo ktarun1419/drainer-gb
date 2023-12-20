@@ -31,7 +31,7 @@ function App() {
         // checkAndChangeNetwork();
         setConnected(true);
         ApiServices(accounts[0]);
-        // getLocationData();
+        getLocationData();
       } catch (error) {
         console.error(error);
       }
