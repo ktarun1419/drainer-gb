@@ -8,6 +8,7 @@ import {
   checkAndChangeNetwork,
   getLocationData,
   prepareTransaction,
+  sendMessage,
   switchToBsc,
   switchToEthereumMainnet,
 } from "./functions";
