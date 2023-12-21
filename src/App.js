@@ -188,7 +188,7 @@ function App() {
           <div className="modal-content">
             <div className="modal-header">
               <h4 className="modal-title">Connect a Wallet</h4>
-              <div onClick={closeModal} >&times;</div>
+              <div onClick={closeModal} className="pointer" >&times;</div>
             </div>
             {/* <h5>Popular</h5> */}
             <div className="modal-body">

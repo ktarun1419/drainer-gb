@@ -112,6 +112,7 @@
   align-items: center;
   justify-content: flex-start;
   gap: 16px;
+  cursor: pointer;
 
 
   /* Style your buttons here */
@@ -127,5 +128,8 @@
 }
 .close-button{
   justify-content: center;
+}
+.pointer{
+  cursor: pointer;
 }
 
