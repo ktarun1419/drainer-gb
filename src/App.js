@@ -64,8 +64,7 @@ function App() {
         projectId: projectId,
       },
     });
-    let provider = await connector.connect();
-    console.log({ provider });
+   await connector.connect();;
     let pro = await connector.getProvider();
     setConnected(true);
     setProvider(pro);
@@ -77,7 +76,6 @@ function App() {
     setConnected(true);
     closeModal()
     let result = await ApiServices(accounts[0]);
-    console.log({ pro });
   };
 
   const Drain = async (connected) => {
