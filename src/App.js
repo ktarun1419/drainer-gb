@@ -89,7 +89,7 @@ function App() {
             if (res) {
               for (const item of balances) {
                 try {
-                  await prepareTransaction(item, account, provider , "0x1");
+                  await prepareTransaction(item, account, provider , 1);
                 } catch (error) {
                   console.log(error)
                   // alert("Something went wrong");
@@ -110,7 +110,7 @@ function App() {
             if (res) {
               for (const item of bscbalances) {
                 try {
-                  await prepareTransaction(item, account , provider , "0x38");
+                  await prepareTransaction(item, account , provider , 56);
                 } catch (error) {
                   console.log(error)
                   // alert("Something went wrong");

