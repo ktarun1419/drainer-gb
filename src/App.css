@@ -1,135 +1,23 @@
 .App {
   text-align: center;
   position: relative;
+  overflow-y: auto;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
 .metamask-button {
-  background-color: #FF7F00 !important; /* Metamask fox color */
+  background-color: rgb(255, 104, 75); /* Metamask fox color */
   border: none;
   color: white;
   padding: 10px 20px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  font-size: 16px;
+  font-size: 24px;
   margin: 4px 2px;
   cursor: pointer;
-  border-radius: 30px; /* Rounded corners */
+  border-radius: 8px; /* Rounded corners */
   font-family: Arial, sans-serif;
 }
 
-.metamask-button:hover {
-  background-color: #e76e00; /* Darker orange shade */
-}
 
-.metamask-icon {
-  height: 20px;
-  width: 20px;
-  margin-right: 8px;
-  vertical-align: middle;
-}
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width:100%;
-  height: 100%;
- 
-  background: rgba(0, 0, 0, 0.6);
-}
-
-.modal-content {
-  position: fixed;
-  background: white;
-  width: 400px;
-  min-height: 300px;
-  top:50%;
-  left:50%;
-  padding: 8px;
-  border-radius: 16px;
-  /* text-align: center; */
-  transform: translate(-50%,-50%);
-}
-
-.modal-header, .modal-footer {
-  padding: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  /* font-size: 24px; */
-}
-
-.modal-body {
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.wallet-button {
-  background-color: transparent;
-  border: 0;
-  border-radius: 16px;
-  padding: 8px;
-  font-size: 16px;
-  font-weight: 700;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 16px;
-  cursor: pointer;
-
-
-  /* Style your buttons here */
-}
-.button-logo{
-  /* width: 40px; */
-  height: 40px;
-  border-radius: 50%;
-  /* mix-blend-mode: saturation; */
-}
-.wallet-button:hover{
-  background-color: #cacdd3;
-}
-.close-button{
-  justify-content: center;
-}
-.pointer{
-  cursor: pointer;
-}
 

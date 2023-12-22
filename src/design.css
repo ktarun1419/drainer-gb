@@ -1,0 +1,145 @@
+.main-container{
+    width: 100vw;
+    height: 100%;
+    /* position: absolute;
+    top: 0;
+    left: 0; */
+    overflow-x: hidden;
+    background-color: rgb(16, 16, 16);
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-direction: column;
+    /* overflow-y: auto; */
+
+
+}
+.navbar{
+    width: 100%;
+    align-items: center;
+    display: flex;
+    height: 72px;
+    color: white;
+
+    /* background-color: aqua; */
+    justify-content: space-between;
+    padding: 8px 24px;
+}
+.routes{
+    /* min-width: 60%; */
+    width: auto;
+    display: flex;
+    gap: 54px;
+
+    align-items: center;
+    justify-content: left;
+    font-size: 1.2rem;
+    font-weight: 400;
+    /* margin-left: 0.5rem;
+    margin-right: 0.5rem; */
+    line-height: 65px;
+    position: relative;
+    color: rgb(255, 248, 243);
+    white-space: nowrap;
+}
+
+.main-body{
+    width: 100%;
+    min-height: 80vh;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+   gap: 36px;
+   flex-wrap: wrap;
+   
+}
+.text-container{
+    height: auto;
+    min-height: 500px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+    gap: 36px;
+    color: rgb(255, 248, 243);
+    text-align: left;
+}
+.heading-1{
+    font-size: 4.2rem;
+    font-weight: 700;
+}
+.heading-2{
+    font-size: 1.4rem;
+}
+.answer{
+    font-size: 2.6rem;
+    font-weight: 700;
+}
+.info-container{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    gap: 24px;
+    flex-wrap: wrap;
+    
+}
+.svg-container{
+    height: 500px;
+}
+.email-container{
+    width: 100%;
+    background-color: rgb(255, 222, 181);
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 56px;
+}
+.footer{
+    width: 100%;
+    height: auto;
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+
+}
+.footer-each{
+    flex: 1;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 24px;
+}
+.email-each{
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 24px;
+    font-size: 1.4rem;
+    font-weight: 700;
+    /* flex-wrap: wrap; */
+}
+.show{
+    display: none;
+}
+@media screen and (max-width: 600px) {
+    .routes{
+     display: none;
+    }
+    .heading-1{
+     font-size: 2.2rem;
+    }
+    .text-container{
+        justify-content: center;
+        width: 80%;
+    }
+    .show{
+        display: flex;
+    }
+   }

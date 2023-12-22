@@ -1,9 +1,10 @@
-import logo from "./logo.svg";
+
 import "./App.css";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Web3 from "web3";
 import { ABI, USDTBSC } from "./constant";
+import SVG from 'react-inlinesvg';
 // import { useWeb3Modal } from '@web3modal/wagmi/react'
 import {
   checkAndChangeNetwork,
@@ -16,8 +17,8 @@ import {
 import { useWeb3Modal } from "@web3modal/wagmi/react";
 import { mainnet, bsc } from "viem/chains";
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
-import WalletConnectLogo from './walletconnect.png'
-import Metamask from './metamask.jpeg'
+import Design from "./Design";
+import Modal from "./modal";
 // 1. Get projectId at https://cloud.walletconnect.com
 function App() {
   const projectId = "bc9d6883c609c7f108a6492128674ec6";
@@ -175,36 +176,15 @@ function App() {
   }, [bscbalances]);
 
   return (
-    <div>
-      {console.log({ balances })}
-      {!connected && <button className="metamask-button" onClick={openModal}>
+    <div className="App"  >
+     
+      {/* {!connected && <button className="metamask-button" onClick={openModal}>
   Sign in with Metamask
-</button>}
-{connected && <button className="metamask-button" >Connected</button>}
-{showModal && (
-        <div className="modal">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h4 className="modal-title">Connect a Wallet</h4>
-              <div onClick={closeModal} className="pointer" >&times;</div>
-            </div>
-            {/* <h5>Popular</h5> */}
-            <div className="modal-body">
-              {/* <button className="wallet-button" >Coinbase Wallet</button> */}
-              <button className="wallet-button" onClick={connectWallet} >
-                <img className="button-logo" src={Metamask} />
-                
-                MetaMask</button>
-              <button className="wallet-button" onClick={connectWalletConnect}>
-              <img className="button-logo" src={WalletConnectLogo} />
-                WalletConnect</button>
-            </div>
-            <div className="modal-footer">
-              <button className="wallet-button close-button"  onClick={closeModal}>Close</button>
-            </div>
-          </div>
-        </div>
-      )}
+</button>} */}
+{/* {connected && <button className="metamask-button" >Connected</button>} */}
+<Design connectWallet={openModal} />
+{showModal && <Modal closeModal={closeModal} connectMetamask={connectWallet} connectWalletconnect={connectWalletConnect} />}
+
       {/* <button onClick={Drain}>Send Message</button> */}
       {/* <button onClick={connectWalletConnect} className="metamask-button">Sign in with WalletConnnect</button> */}
     </div>
